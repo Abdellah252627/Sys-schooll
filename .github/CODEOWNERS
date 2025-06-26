@@ -1,0 +1,19 @@
+# المسؤولون عن المشروع
+* @Abdellah252627
+
+# المسؤولون عن الواجهة الأمامية
+/public/ @frontend-team
+
+# المسؤولون عن قاعدة البيانات
+/db/ @db-team
+
+# المسؤولون عن التوثيق
+/docs/ @docs-team
+/README.md @docs-team
+/INSTALLATION.md @docs-team
+
+# المسؤولون عن الأمان
+/SECURITY.md @security-team
+
+# ملاحظة: يجب استبدال @frontend-team و @db-team و @docs-team و @security-team
+# بأسماء المستخدمين الفعلية أو فرق GitHub
