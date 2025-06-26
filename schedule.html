@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول الحصص</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="schedule.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <h2>جدول الحصص</h2>
+        <form id="scheduleForm">
+            <label>اسم الطالب أو المعلم:</label>
+            <input type="text" id="personName" required>
+            <label>اليوم:</label>
+            <select id="day">
+                <option value="الأحد">الأحد</option>
+                <option value="الإثنين">الإثنين</option>
+                <option value="الثلاثاء">الثلاثاء</option>
+                <option value="الأربعاء">الأربعاء</option>
+                <option value="الخميس">الخميس</option>
+            </select>
+            <label>الحصة/المادة:</label>
+            <input type="text" id="subject" required>
+            <label>الوقت:</label>
+            <input type="text" id="time" placeholder="08:00 - 09:00" required>
+            <button type="submit">إضافة إلى الجدول</button>
+        </form>
+        <hr>
+        <h3>عرض الجدول</h3>
+        <label>اسم الطالب أو المعلم للبحث:</label>
+        <input type="text" id="searchName">
+        <button onclick="filterSchedule()">بحث</button>
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>اليوم</th>
+                    <th>الحصة/المادة</th>
+                    <th>الوقت</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+</html>

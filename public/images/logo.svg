@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Book Icon -->
+  <path d="M20 10H40V50H20C18.8954 50 18 49.1046 18 48V12C18 10.8954 18.8954 10 20 10Z" fill="#4361EE"/>
+  <path d="M40 10H50V50H40V10Z" fill="#3A56D4"/>
+  <path d="M20 10C18.8954 10 18 10.8954 18 12V48C18 49.1046 18.8954 50 20 50H40V10H20Z" fill="#3F37C9"/>
+  <path d="M30 20L25 25L30 30" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- School Name in Arabic -->
+  <text x="60" y="35" font-family="Tajawal, Arial, sans-serif" font-size="24" font-weight="700" fill="#212529">نظام المدرسة</text>
+  
+  <!-- Tagline -->
+  <text x="60" y="50" font-family="Tajawal, Arial, sans-serif" font-size="14" fill="#6C757D">نظام إدارة المدرسة</text>
+</svg>

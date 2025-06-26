@@ -1,0 +1,194 @@
+extends ../layouts/main
+
+block content
+  .row.justify-content-center
+    .col-lg-8
+      .card.shadow-sm.border-0.rounded-3.overflow-hidden
+        .card-body.p-4.p-md-5
+          .text-center.mb-4
+            h2.h3.mb-3 إنشاء حساب جديد
+            p.text-muted.mb-0 قم بإنشاء حساب للوصول إلى نظام المدرسة
+          
+          if error
+            .alert.alert-danger.alert-dismissible.fade.show.mb-4(role="alert")
+              i.fas.fa-exclamation-circle.me-2
+              | #{error}
+              button.btn-close(type="button" data-bs-dismiss="alert")
+          
+          form(action="/auth/register" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate)
+            input(type="hidden" name="_csrf" value=csrfToken)
+            
+            .row
+              .col-md-6.mb-3
+                label.form-label(for="name") الاسم الكامل
+                .input-group
+                  span.input-group-text.bg-light.border-end-0
+                    i.fas.fa-user.text-muted
+                  input#name.form-control(
+                    type="text"
+                    name="name"
+                    placeholder="أدخل اسمك الكامل"
+                    required
+                  )
+                  .invalid-feedback
+                    | الرجاء إدخال الاسم الكامل
+              
+              .col-md-6.mb-3
+                label.form-label(for="email") البريد الإلكتروني
+                .input-group
+                  span.input-group-text.bg-light.border-end-0
+                    i.fas.fa-envelope.text-muted
+                  input#email.form-control(
+                    type="email"
+                    name="email"
+                    placeholder="أدخل بريدك الإلكتروني"
+                    required
+                  )
+                  .invalid-feedback
+                    | الرجاء إدخال بريد إلكتروني صحيح
+            
+            .row
+              .col-md-6.mb-3
+                label.form-label(for="password") كلمة المرور
+                .input-group
+                  span.input-group-text.bg-light.border-end-0
+                    i.fas.fa-lock.text-muted
+                  input#password.form-control(
+                    type="password"
+                    name="password"
+                    placeholder="أدخل كلمة المرور"
+                    required
+                    minlength="8"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  )
+                  button.password-toggle.btn.btn-outline-secondary.border-start-0(type="button")
+                    i.fas.fa-eye-slash
+                  .invalid-feedback
+                    | يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وتشمل حروفًا كبيرة وصغيرة وأرقامًا
+              
+              .col-md-6.mb-3
+                label.form-label(for="confirmPassword") تأكيد كلمة المرور
+                .input-group
+                  span.input-group-text.bg-light.border-end-0
+                    i.fas.fa-lock.text-muted
+                  input#confirmPassword.form-control(
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="أعد إدخال كلمة المرور"
+                    required
+                  )
+                  .invalid-feedback
+                    | يجب أن تتطابق كلمتا المرور
+            
+            .row
+              .col-md-6.mb-3
+                label.form-label(for="phone") رقم الجوال
+                .input-group
+                  span.input-group-text.bg-light.border-end-0
+                    i.fas.fa-phone.text-muted
+                  input#phone.form-control(
+                    type="tel"
+                    name="phone"
+                    placeholder="مثال: 0512345678"
+                    pattern="[0-9]{10}"
+                  )
+                  .invalid-feedback
+                    | الرجاء إدخال رقم جوال صحيح (10 أرقام)
+              
+              .col-md-6.mb-3
+                label.form-label(for="role") نوع الحساب
+                select#role.form-select(name="role" required)
+                  option(value="" selected disabled>اختر نوع الحساب</option>
+                  option(value="student">طالب
+                  option(value="parent">ولي أمر
+                  option(value="teacher">معلم
+                .invalid-feedback
+                  | الرجاء اختيار نوع الحساب
+            
+            .mb-4
+              label.form-label(for="avatar">صورة الملف الشخصي (اختياري)
+              input#avatar.form-control(
+                type="file"
+                name="avatar"
+                accept="image/*"
+              )
+              .form-text.text-muted
+                | الصور المسموح بها: JPG, PNG, GIF بحد أقصى 2 ميجابايت
+            
+            .form-check.mb-4
+              input#terms.form-check-input(type="checkbox" required)
+              label.form-check-label(for="terms">
+                | أوافق على 
+                a(href="/terms" target="_blank">الشروط والأحكام
+                |  و 
+                a(href="/privacy" target="_blank">سياسة الخصوصية
+              .invalid-feedback
+                | يجب الموافقة على الشروط والأحكام
+            
+            button.btn.btn-primary.btn-lg.w-100.mb-3(type="submit")
+              i.fas.fa-user-plus.me-2
+              | إنشاء الحساب
+            
+            .text-center.pt-3
+              p.mb-0.text-muted
+                | لديك حساب بالفعل؟ 
+                a(href="/auth/login">تسجيل الدخول
+
+block scripts
+  script.
+    // Password match validation
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    
+    function validatePassword() {
+      if (password.value !== confirmPassword.value) {
+        confirmPassword.setCustomValidity('كلمتا المرور غير متطابقتين');
+      } else {
+        confirmPassword.setCustomValidity('');
+      }
+    }
+    
+    password.onchange = validatePassword;
+    confirmPassword.onkeyup = validatePassword;
+    
+    // Toggle password visibility
+    document.querySelectorAll('.password-toggle').forEach(button => {
+      button.addEventListener('click', function() {
+        const input = this.parentElement.querySelector('input');
+        const icon = this.querySelector('i');
+        
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        } else {
+          input.type = 'password';
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        }
+      });
+    });
+    
+    // File input preview
+    const avatarInput = document.getElementById('avatar');
+    if (avatarInput) {
+      avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          // Validate file size (max 2MB)
+          if (file.size > 2 * 1024 * 1024) {
+            alert('حجم الملف يجب أن لا يتجاوز 2 ميجابايت');
+            this.value = '';
+            return;
+          }
+          
+          // Validate file type
+          const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+          if (!validTypes.includes(file.type)) {
+            alert('نوع الملف غير مدعوم. الرجاء تحميل صورة بصيغة JPG أو PNG أو GIF');
+            this.value = '';
+            return;
+          }
+        }
+      });
+    }

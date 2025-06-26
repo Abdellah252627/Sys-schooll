@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإشعارات</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="notifications.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <h2>نظام الإشعارات</h2>
+        <form id="notificationForm">
+            <label>المرسل (المعلم أو الإدارة):</label>
+            <input type="text" id="sender" required>
+            <label>المستلم (اختياري):</label>
+            <input type="text" id="recipient" placeholder="اتركه فارغًا لإرسال للجميع">
+            <label>نوع الإشعار:</label>
+            <select id="type">
+                <option value="تنبيه">تنبيه</option>
+                <option value="إعلان">إعلان</option>
+            </select>
+            <label>محتوى الإشعار:</label>
+            <textarea id="message" required></textarea>
+            <button type="submit">إرسال الإشعار</button>
+        </form>
+        <hr>
+        <h3>قائمة الإشعارات</h3>
+        <table id="notificationsTable">
+            <thead>
+                <tr>
+                    <th>المرسل</th>
+                    <th>المستلم</th>
+                    <th>النوع</th>
+                    <th>المحتوى</th>
+                    <th>التاريخ</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+</html>

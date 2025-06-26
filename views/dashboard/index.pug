@@ -1,0 +1,205 @@
+extends ../layouts/main
+
+block content
+  .container
+    // Welcome Section
+    .row.mb-4
+      .col-12
+        .card.bg-primary.text-white.overflow-hidden
+          .card-body.p-4.p-xl-5
+            .row.align-items-center
+              .col-md-8
+                h2.h3.mb-3
+                  | مرحباً بك، #{user.name} 👋
+                p.mb-4
+                  | لديك 5 إشعارات جديدة و 3 مهام معلقة. تحقق من آخر التحديثات أدناه.
+                a.btn.btn-light.rounded-pill.px-4(href="/notifications")
+                  i.fas.fa-bell.me-2
+                  | عرض الإشعارات
+              .col-md-4.d-none.d-md-block
+                img.img-fluid(src="/images/dashboard-illustration.svg" alt="Dashboard Illustration")
+    
+    // Stats Cards
+    .row.g-4.mb-4
+      .col-md-6.col-lg-3
+        .card.h-100.border-0.shadow-sm.hover-lift
+          .card-body
+            .d-flex.align-items-center
+              .bg-soft-primary.rounded-3.p-3.me-3
+                i.fas.fa-users.fa-2x.text-primary
+              div
+                h6.h6.mb-1 الطلاب
+                h3.h2.mb-0 248
+      
+      .col-md-6.col-lg-3
+        .card.h-100.border-0.shadow-sm.hover-lift
+          .card-body
+            .d-flex.align-items-center
+              .bg-soft-success.rounded-3.p-3.me-3
+                i.fas.fa-chalkboard-teacher.fa-2x.text-success
+              div
+                h6.h6.mb-1 المعلمون
+                h3.h2.mb-0 24
+      
+      .col-md-6.col-lg-3
+        .card.h-100.border-0.shadow-sm.hover-lift
+          .card-body
+            .d-flex.align-items-center
+              .bg-soft-warning.rounded-3.p-3.me-3
+                i.fas.fa-book.fa-2x.text-warning
+              div
+                h6.h6.mb-1 المواد
+                h3.h2.mb-0 12
+      
+      .col-md-6.col-lg-3
+        .card.h-100.border-0.shadow-sm.hover-lift
+          .card-body
+            .d-flex.align-items-center
+              .bg-soft-danger.rounded-3.p-3.me-3
+                i.fas.fa-tasks.fa-2x.text-danger
+              div
+                h6.h6.mb-1 الواجبات
+                h3.h2.mb-0 18
+    
+    // Recent Activity & Upcoming Events
+    .row.g-4.mb-4
+      // Recent Activity
+      .col-lg-8
+        .card.border-0.shadow-sm.h-100
+          .card-header.bg-white.border-0.py-3
+            h5.h6.mb-0
+              i.fas.fa-history.me-2
+              | النشاطات الحديثة
+          .card-body.p-0
+            .list-group.list-group-flush
+              each activity in recentActivities
+                a.list-group-item.list-group-item-action.border-0.px-4.py-3(href=activity.link)
+                  .d-flex.align-items-center
+                    .flex-shrink-0
+                      .bg-soft-primary.rounded-circle.p-2.me-3
+                        i.fas.fa-check.text-primary
+                    .flex-grow-1
+                      .d-flex.justify-content-between.align-items-center
+                        h6.h6.mb-0= activity.title
+                        small.text-muted= activity.time
+                      p.small.text-muted.mb-0= activity.description
+          
+          .card-footer.bg-white.border-0.pt-0.pb-3.px-4
+            a.btn.btn-sm.btn-outline-primary.rounded-pill(href="/activities")
+              | عرض الكل
+              i.fas.fa-arrow-left.ms-2
+      
+      // Upcoming Events
+      .col-lg-4
+        .card.border-0.shadow-sm.h-100
+          .card-header.bg-white.border-0.py-3
+            h5.h6.mb-0
+              i.far.fa-calendar-alt.me-2
+              | الأحداث القادمة
+          
+          .card-body.p-0
+            .list-group.list-group-flush
+              each event in upcomingEvents
+                a.list-group-item.list-group-item-action.border-0.px-4.py-3(href=event.link)
+                  .d-flex.align-items-center
+                    .flex-shrink-0.text-center.me-3
+                      .bg-soft-primary.rounded-3.p-2
+                        h5.mb-0.text-primary= event.day
+                        small.d-block.text-muted= event.month
+                    .flex-grow-1
+                      h6.h6.mb-1= event.title
+                      p.small.text-muted.mb-0
+                        i.far.fa-clock.me-1
+                        | #{event.time} - #{event.location}
+          
+          .card-footer.bg-white.border-0.pt-0.pb-3.px-4
+            a.btn.btn-sm.btn-outline-primary.rounded-pill(href="/events")
+              | عرض الكل
+              i.fas.fa-arrow-left.ms-2
+    
+    // Quick Actions
+    .row.g-4.mb-4
+      .col-12
+        .card.border-0.shadow-sm
+          .card-header.bg-white.border-0.py-3
+            h5.h6.mb-0
+              i.fas.fa-bolt.me-2
+              | إجراءات سريعة
+          .card-body
+            .row.g-3
+              .col-6.col-md-4.col-lg-2
+                a.btn.btn-light.btn-lg.w-100.h-100.d-flex.flex-column.align-items-center.justify-content-center.p-3.rounded-3.hover-lift(href="/assignments/new")
+                  .bg-soft-primary.rounded-circle.p-3.mb-2
+                    i.fas.fa-plus.fa-2x.text-primary
+                  span.small.text-center إنشاء واجب
+              
+              .col-6.col-md-4.col-lg-2
+                a.btn.btn-light.btn-lg.w-100.h-100.d-flex.flex-column.align-items-center.justify-content-center.p-3.rounded-3.hover-lift(href="/students/add")
+                  .bg-soft-success.rounded-circle.p-3.mb-2
+                    i.fas.fa-user-plus.fa-2x.text-success
+                  span.small.text-center إضافة طالب
+              
+              .col-6.col-md-4.col-lg-2
+                a.btn.btn-light.btn-lg.w-100.h-100.d-flex.flex-column.align-items-center.justify-content-center.p-3.rounded-3.hover-lift(href="/grades/enter")
+                  .bg-soft-warning.rounded-circle.p-3.mb-2
+                    i.fas.fa-edit.fa-2x.text-warning
+                  span.small.text-center إدخال درجات
+              
+              .col-6.col-md-4.col-lg-2
+                a.btn.btn-light.btn-lg.w-100.h-100.d-flex.flex-column.align-items-center.justify-content-center.p-3.rounded-3.hover-lift(href="/reports")
+                  .bg-soft-info.rounded-circle.p-3.mb-2
+                    i.fas.fa-chart-bar.fa-2x.text-info
+                  span.small.text-center التقارير
+              
+              .col-6.col-md-4.col-lg-2
+                a.btn.btn-light.btn-lg.w-100.h-100.d-flex.flex-column.align-items-center.justify-content-center.p-3.rounded-3.hover-lift(href="/announcements/new")
+                  .bg-soft-danger.rounded-circle.p-3.mb-2
+                    i.fas.fa-bullhorn.fa-2x.text-danger
+                  span.small.text-center إعلان جديد
+              
+              .col-6.col-md-4.col-lg-2
+                a.btn.btn-light.btn-lg.w-100.h-100.d-flex.flex-column.align-items-center.justify-content-center.p-3.rounded-3.hover-lift(href="/settings")
+                  .bg-soft-secondary.rounded-circle.p-3.mb-2
+                    i.fas.fa-cog.fa-2x.text-secondary
+                  span.small.text-center الإعدادات
+
+block scripts
+  // Add any additional scripts specific to the dashboard
+  script.
+    // Initialize any charts or additional functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Example: Initialize a simple chart
+      if (typeof Chart !== 'undefined') {
+        const ctx = document.getElementById('dashboardChart');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+              datasets: [{
+                label: 'الطلاب المسجلين',
+                data: [12, 19, 3, 5, 2, 3],
+                borderColor: '#4361ee',
+                tension: 0.1,
+                fill: true,
+                backgroundColor: 'rgba(67, 97, 238, 0.1)'
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'top',
+                  rtl: true
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        }
+      }
+    });

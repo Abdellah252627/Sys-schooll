@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="app_name">لوحة التحكم - النظام المدرسي</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .language-switcher {
+            position: relative;
+            margin-left: 15px;
+        }
+        
+        .language-switcher button {
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .language-switcher button i {
+            font-size: 1.1rem;
+        }
+        
+        .language-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            min-width: 120px;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 8px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-flag {
+            width: 20px;
+            height: 15px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="fas fa-school"></i>
+                <span data-translate="app_name">النظام المدرسي</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active">
+                    <a href="#">
+                        <i class="fas fa-home"></i>
+                        <span data-translate="dashboard">الرئيسية</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="students.html">
+                        <i class="fas fa-users"></i>
+                        <span data-translate="students">الطلاب</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="teachers.html">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span data-translate="teachers">المعلمين</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="attendance.html">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span data-translate="attendance">الحضور</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="grades.html">
+                        <i class="fas fa-chart-line"></i>
+                        <span data-translate="grades">الدرجات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="schedule.html">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span data-translate="schedule">الجدول</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="user-menu">
+                <img src="https://ui-avatars.com/api/?name=مدير+النظام" alt="User">
+                <span>مدير النظام</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </nav>
+        
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" data-translate="search_placeholder" placeholder="بحث...">
+                </div>
+                <div class="top-bar-right">
+                    <div class="language-switcher">
+                        <button id="languageToggle">
+                            <span class="language-flag" style="background-image: url('https://flagcdn.com/w20/sa.png')"></span>
+                            <span data-translate="language">اللغة</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="language-dropdown" id="languageDropdown">
+                            <div class="language-option" data-lang="ar">
+                                <span class="language-flag" style="background-image: url('https://flagcdn.com/w20/sa.png')"></span>
+                                <span data-translate="arabic">العربية</span>
+                            </div>
+                            <div class="language-option" data-lang="en">
+                                <span class="language-flag" style="background-image: url('https://flagcdn.com/w20/gb.png')"></span>
+                                <span data-translate="english">الإنجليزية</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="dashboard-app">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add translations script before other scripts -->
+    <script src="translations.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ar.js"></script>
+    <script>
+        // Language management
+        let currentLanguage = localStorage.getItem('preferredLanguage') || 'ar';
+        
+        // Function to set language
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('preferredLanguage', lang);
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                const translation = translations.t(key, lang);
+                if (el.tagName === 'INPUT' && el.placeholder) {
+                    el.placeholder = translation;
+                } else if (el.tagName === 'TITLE') {
+                    el.textContent = translation + ' - ' + translations.t('app_name', lang);
+                } else {
+                    el.textContent = translation;
+                }
+            });
+            
+            // Update calendar if it exists
+            if (window.flatpickrInstances) {
+                Object.values(window.flatpickrInstances).forEach(instance => {
+                    instance.set('locale', lang);
+                });
+            }
+            
+            // Update dashboard content
+            if (window.loadDashboard) {
+                loadDashboard();
+            }
+        }
+        
+        // Initialize language
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial language
+            setLanguage(currentLanguage);
+            
+            // Toggle language dropdown
+            const languageToggle = document.getElementById('languageToggle');
+            const languageDropdown = document.getElementById('languageDropdown');
+            
+            if (languageToggle && languageDropdown) {
+                languageToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    languageDropdown.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!languageToggle.contains(e.target)) {
+                        languageDropdown.classList.remove('show');
+                    }
+                });
+                
+                // Handle language selection
+                document.querySelectorAll('.language-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        const lang = option.getAttribute('data-lang');
+                        setLanguage(lang);
+                        languageDropdown.classList.remove('show');
+                    });
+                });
+            }
+        });
+    </script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

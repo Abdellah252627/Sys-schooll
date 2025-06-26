@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير والتحليلات</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="reports.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <h2>التقارير والتحليلات</h2>
+        <div>
+            <button onclick="generatePerformanceReport()">تقرير أداء الطلاب</button>
+            <button onclick="generateAttendanceReport()">تقرير الحضور</button>
+            <button onclick="generateClassReport()">تقرير الفصول</button>
+        </div>
+        <hr>
+        <div>
+            <label>رفع ملف:</label>
+            <input type="file" id="fileUpload" accept=".xls,.xlsx,.csv,.pdf">
+            <button onclick="exportReport('pdf')">تصدير PDF</button>
+            <button onclick="exportReport('excel')">تصدير Excel</button>
+        </div>
+        <hr>
+        <div id="reportContainer"></div>
+    </div>
+</body>
+</html>

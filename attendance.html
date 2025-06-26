@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتبع الحضور</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .attendance-container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 30px; }
+        .attendance-container h2 { text-align: center; color: #34495e; }
+        .attendance-container form { margin-bottom: 24px; }
+        .attendance-container label { display: block; margin-bottom: 6px; }
+        .attendance-container input, .attendance-container select { width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 4px; border: 1px solid #ccc; }
+        .attendance-container button { width: 100%; padding: 10px; background: #2ecc71; color: #fff; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; }
+        .attendance-container button:hover { background: #27ae60; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background: #f0f4f8; }
+    </style>
+</head>
+<body>
+    <div class="attendance-container">
+        <h2>تتبع الحضور</h2>
+        <form id="attendanceForm">
+            <label>اسم الطالب:</label>
+            <input type="text" id="studentName" required>
+            <label>الحالة:</label>
+            <select id="status" required>
+                <option value="حاضر">حاضر</option>
+                <option value="غائب">غائب</option>
+            </select>
+            <label>اسم المعلم:</label>
+            <input type="text" id="teacherName" required>
+            <label>التاريخ:</label>
+            <input type="date" id="date" required value="">
+            <button type="submit">تسجيل الحضور</button>
+        </form>
+        <h3>سجل الحضور</h3>
+        <table id="attendanceTable">
+            <thead>
+                <tr><th>التاريخ</th><th>اسم الطالب</th><th>الحالة</th><th>اسم المعلم</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script src="attendance.js"></script>
+    <script>
+        function renderAttendanceTable() {
+            const records = getAttendanceRecords();
+            const tbody = document.querySelector('#attendanceTable tbody');
+            tbody.innerHTML = records.map(r => `<tr><td>${r.date}</td><td>${r.studentName}</td><td>${r.status}</td><td>${r.teacherName}</td></tr>`).join('');
+        }
+        document.getElementById('attendanceForm').onsubmit = function(e) {
+            e.preventDefault();
+            const studentName = document.getElementById('studentName').value;
+            const status = document.getElementById('status').value;
+            const teacherName = document.getElementById('teacherName').value;
+            const date = document.getElementById('date').value;
+            saveAttendance(date, studentName, status, teacherName);
+            renderAttendanceTable();
+            this.reset();
+        };
+        renderAttendanceTable();
+    </script>
+</body>
+</html>

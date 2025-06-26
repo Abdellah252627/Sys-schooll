@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول / إنشاء حساب</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .auth-container { max-width: 400px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 30px; }
+        .auth-container h2 { text-align: center; color: #34495e; }
+        .auth-container form { margin-bottom: 24px; }
+        .auth-container label { display: block; margin-bottom: 6px; }
+        .auth-container input { width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 4px; border: 1px solid #ccc; }
+        .auth-container button { width: 100%; padding: 10px; background: #2ecc71; color: #fff; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; }
+        .auth-container button:hover { background: #27ae60; }
+        .role-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .role-tabs button { flex: 1; background: #eee; color: #34495e; border: none; border-radius: 6px; padding: 8px; cursor: pointer; }
+        .role-tabs button.active { background: #2ecc71; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>تسجيل الدخول / إنشاء حساب</h2>
+        <div class="role-tabs">
+            <button id="tab-admin" class="active" onclick="showAuthForm('admin')">الإدارة</button>
+            <button id="tab-teacher" onclick="showAuthForm('teacher')">معلم</button>
+            <button id="tab-student" onclick="showAuthForm('student')">طالب</button>
+            <button id="tab-parent" onclick="showAuthForm('parent')">ولي أمر</button>
+        </div>
+        <div id="auth-forms"></div>
+    </div>
+    <script src="auth.js"></script>
+    <script>
+        function showAuthForm(role) {
+            document.querySelectorAll('.role-tabs button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + role).classList.add('active');
+            let formHtml = '';
+            if (role === 'admin') {
+                formHtml = `
+                    <form onsubmit="return login(event, 'admin')">
+                        <label>الاسم الكامل:</label>
+                        <input type="text" id="admin-fullname" required value="manger">
+                        <label>كلمة المرور:</label>
+                        <input type="password" id="admin-password" required value="manger062244">
+                        <button type="submit">تسجيل الدخول</button>
+                    </form>
+                `;
+            } else if (role === 'teacher') {
+                formHtml = `
+                    <form onsubmit="return register(event, 'teacher')">
+                        <label>الاسم الكامل للمعلم:</label>
+                        <input type="text" id="teacher-fullname" required>
+                        <label>كلمة المرور:</label>
+                        <input type="password" id="teacher-password" required>
+                        <label>تأكيد كلمة المرور:</label>
+                        <input type="password" id="teacher-password2" required>
+                        <button type="submit">إنشاء حساب جديد</button>
+                    </form>
+                    <form onsubmit="return login(event, 'teacher')">
+                        <label>الاسم الكامل:</label>
+                        <input type="text" id="teacher-login-fullname" required>
+                        <label>كلمة المرور:</label>
+                        <input type="password" id="teacher-login-password" required>
+                        <button type="submit">تسجيل الدخول</button>
+                    </form>
+                `;
+            } else if (role === 'student') {
+                formHtml = `
+                    <form onsubmit="return register(event, 'student')">
+                        <label>الاسم الكامل للطالب:</label>
+                        <input type="text" id="student-fullname" required>
+                        <label>كلمة المرور:</label>
+                        <input type="password" id="student-password" required>
+                        <label>تأكيد كلمة المرور:</label>
+                        <input type="password" id="student-password2" required>
+                        <button type="submit">إنشاء حساب جديد</button>
+                    </form>
+                    <form onsubmit="return login(event, 'student')">
+                        <label>الاسم الكامل:</label>
+                        <input type="text" id="student-login-fullname" required>
+                        <label>كلمة المرور:</label>
+                        <input type="password" id="student-login-password" required>
+                        <button type="submit">تسجيل الدخول</button>
+                    </form>
+                `;
+            } else if (role === 'parent') {
+                formHtml = `
+                    <form onsubmit="return register(event, 'parent')">
+                        <label>الاسم الكامل لولي الأمر:</label>
+                        <input type="text" id="parent-fullname" required>
+                        <label>اسم الطالب:</label>
+                        <input type="text" id="parent-student-name" required>
+                        <label>كلمة المرور:</label>
+                        <input type="password" id="parent-password" required>
+                        <label>تأكيد كلمة المرور:</label>
+                        <input type="password" id="parent-password2" required>
+                        <button type="submit">إنشاء حساب جديد</button>
+                    </form>
+                    <form onsubmit="return login(event, 'parent')">
+                        <label>الاسم الكامل:</label>
+                        <input type="text" id="parent-login-fullname" required>
+                        <label>كلمة المرور:</label>
+                        <input type="password" id="parent-login-password" required>
+                        <button type="submit">تسجيل الدخول</button>
+                    </form>
+                `;
+            }
+            document.getElementById('auth-forms').innerHTML = formHtml;
+        }
+        function register(e, role) {
+            e.preventDefault();
+            let fullName, password, password2, studentName = '';
+            if (role === 'teacher') {
+                fullName = document.getElementById('teacher-fullname').value;
+                password = document.getElementById('teacher-password').value;
+                password2 = document.getElementById('teacher-password2').value;
+            } else if (role === 'student') {
+                fullName = document.getElementById('student-fullname').value;
+                password = document.getElementById('student-password').value;
+                password2 = document.getElementById('student-password2').value;
+            } else if (role === 'parent') {
+                fullName = document.getElementById('parent-fullname').value;
+                studentName = document.getElementById('parent-student-name').value;
+                password = document.getElementById('parent-password').value;
+                password2 = document.getElementById('parent-password2').value;
+            }
+            if (password !== password2) {
+                alert('كلمتا المرور غير متطابقتين');
+                return false;
+            }
+            let user = {role, fullName, password};
+            if (role === 'parent') user.studentName = studentName;
+            saveUser(user);
+            alert('تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن.');
+            return false;
+        }
+        function login(e, role) {
+            e.preventDefault();
+            let fullName, password;
+            if (role === 'admin') {
+                fullName = document.getElementById('admin-fullname').value;
+                password = document.getElementById('admin-password').value;
+            } else if (role === 'teacher') {
+                fullName = document.getElementById('teacher-login-fullname').value;
+                password = document.getElementById('teacher-login-password').value;
+            } else if (role === 'student') {
+                fullName = document.getElementById('student-login-fullname').value;
+                password = document.getElementById('student-login-password').value;
+            } else if (role === 'parent') {
+                fullName = document.getElementById('parent-login-fullname').value;
+                password = document.getElementById('parent-login-password').value;
+            }
+            const user = findUser(role, fullName, password);
+            if (user) {
+                alert('تم تسجيل الدخول بنجاح!');
+                // Redirect to dashboard or save session here
+            } else {
+                alert('بيانات الدخول غير صحيحة');
+            }
+            return false;
+        }
+        showAuthForm('admin');
+    </script>
+</body>
+</html>
